@@ -30,10 +30,72 @@
             </form>
         </div>
 
-    </div> 
+    </div>
+    <!-- 提示框静态 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">小小的哔哔一下</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
-    <script src="./js/jquery-1.12.4.min.js"></script>
-    <script src="./js/bootstrap/js/bootstrap.min.js"></script>
-    <script></script>
+<!-- 导入相关js文件 -->
+<script src="./js/jquery-1.12.4.min.js"></script>
+<script src="./js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    $(function () {
+        // 注册点击事件
+        $('.input_sub').on('click', function (e) {
+            //阻止默认的点击跳转页面
+            e.preventDefault();
+            //获取用户名和密码
+            var userName = $('.input_txt').val();
+            var passWord = $('.input_pass').val();
+            if (userName == "" || passWord == "") {
+                $('.modal-body').text('请输入完整的用户名和密码');
+                $('#myModal').modal({
+                    keyboard: true
+                });
+                return;
+            };
+            //发送ajax 请求
+            $.ajax({
+                type: 'post',
+                url: 'http://localhost:8000/admin/login',
+                data: {
+                    user_name: userName,
+                    password: passWord,
+                },
+                success: function (backData) {
+                    console.log(backData);
+                    if (backData.code == 200) {
+                        //登录成功跳转页面
+                        window.location.href = './index.html'
+                    } else {
+                        $('.modal-body').text('输入用户名或密码错误');
+                        $('#myModal').modal({
+                            keyboard: true
+                        });
+                    }
+
+                }
+            });
+
+        })
+    });
+</script>
+
 </html>
