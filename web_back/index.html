@@ -18,7 +18,7 @@
         <a href="#" class="logo"><img src="images/logo02.png" alt="logo"></a>
         <div class="user_info">
             <img src="images/2.jpg" alt="person">
-            <span>欢迎&nbsp;&nbsp;李思思</span>
+            <span id="mingzi">欢迎&nbsp;&nbsp;李思思</span>
             <b>管理员</b>
         </div>
         <div class="menu">
@@ -114,6 +114,16 @@
     <script>
 
         $(function () {
+            //获取后台用户头像和用户信息
+            $.ajax({
+                url: 'http://localhost:8000/admin/getuser',
+                success: function (backData) {
+                    console.log(backData);
+                 $('.user_info>img')[0].setAttribute('src', backData.data.user_pic)
+                 $('#mingzi').html('&nbsp&nbsp' +backData.data.nickname)
+                 $('.user_center_link img')[0].setAttribute('src', backData.data.user_pic)
+                }
+            })
             //点击登出退出网页返回登录页面
             $('#lognout').on('click', function (e) {
                 e.preventDefault();
@@ -122,8 +132,8 @@
                     url: 'http://localhost:8000/admin/logout ',
                     success: function (backData) {
                         console.log(backData);
-                        if(backData.code==200) {
-                            window.location.href='./login.html'
+                        if (backData.code == 200) {
+                            window.location.href = './login.html'
                         }
 
                     }
